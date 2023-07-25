@@ -29,4 +29,5 @@ main = do
   checkPrettyPrint subExample "<msub><mi>a</mi><mn>1</mn></msub>"
   checkPrettyPrint supExample "<msup><mi>x</mi><mn>2</mn></msup>"
   checkPrettyPrint fracSupExample "<mfrac><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup></mfrac>"
-  testParse2 jsonStr
+  --testParse2 jsonStr
+  --mapM_ testParse2 testCases
