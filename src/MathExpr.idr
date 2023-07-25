@@ -44,13 +44,11 @@ fromChar : Char -> JSToken
 fromChar = Symbol
 
 
-
 export
 Interpolation JSToken where
   interpolate (Symbol c) = show c
   interpolate (Lit x)    = "'\{show x}'"
   interpolate Space      = "<spaces>"
-
 
 
 export
@@ -81,7 +79,6 @@ sum : Rule2 True JsonTree
 
 lit : Rule2 True JsonTree
 lit = terminal $ \case Lit j => Just j; _ => Nothing
-
 
 
 covering
