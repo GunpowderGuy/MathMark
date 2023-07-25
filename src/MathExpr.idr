@@ -103,6 +103,7 @@ var = Var2 <$> terminal (\case Lit (Var2 v) => Just v; _ => Nothing)
 -- Parser entry point
 parse2 : String -> Either (List1 (FileContext, JSParseErr)) JsonTree
 parse2 s = case tokJSON2 s of
+
   Left x  => Left (singleton $ fromBounded Virtual $ map fromVoid x)
   Right x => case parse value2 () x of
     Left es                => Left (fromBounded Virtual <$> es)
@@ -113,29 +114,20 @@ parse2 s = case tokJSON2 s of
 testParse2 : String -> IO ()
 testParse2 s = putStrLn $ either (printParseErrors s) show (parse2 s)
 
-runTestCases : List String -> IO ()
+public export
+runTestCases : List (List JSToken) -> IO ()
 runTestCases [] = putStrLn "All test cases passed!"
 runTestCases (t::ts) = do
-  putStrLn ("Running test case: " ++ t)
-  testParse2 t
+  putStrLn ("Running test case: " ++ show t)
+  testParse2 (concatMap show t) -- Convert the list of JSToken to a String
   putStrLn ""
   runTestCases ts
 
 
 public export
-testCases : List String
+testCases : List (List JSToken)
 testCases =
-  -- Add your tokenized test cases here
-     -- For example:
   [ 
- 
-    "Lit3 5",
-    "Var2 \"x\"",
-    "Add2 (Lit3 5) (Lit3 2)",
-    "Sub2 (Lit3 5) (Add2 (Lit3 3) (Lit3 2))",
-    "Mul2 (Lit3 5) (Lit3 2)",
-    "Div2 (Lit3 5) (Add2 (Lit3 2) (Lit3 3))"
-    -- ...
+   [  Symbol '+' ]
   ]
-
 

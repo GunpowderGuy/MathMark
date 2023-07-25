@@ -15,12 +15,6 @@ checkPrettyPrint expr expected =
 
 -- Example usage
 
-jsonStr : String
-jsonStr = "{ \"name\": \"John\", \"age\": 30, \"city\": \"New York\" }"
-
-
-
-
 
 main : IO ()
 main = do
@@ -30,4 +24,4 @@ main = do
   checkPrettyPrint supExample "<msup><mi>x</mi><mn>2</mn></msup>"
   checkPrettyPrint fracSupExample "<mfrac><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup></mfrac>"
   --testParse2 jsonStr
-  --mapM_ testParse2 testCases
+  runTestCases testCases
