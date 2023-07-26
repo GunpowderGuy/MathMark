@@ -77,12 +77,12 @@ jsstring = quote (is '"') jsonChar
 jsonTokenMap : TokenMap JSToken
 jsonTokenMap =
   [ (spaces, const Space)
-  , (is ',', const ',')
-  , (is ':', const ':')
-  , (is '[', const '[')
-  , (is ']', const ']')
-  , (is '{', const '{')
-  , (is '}', const '}')
+  , (is '+', const ',')
+  , (is '-', const ':')
+  , (is '*', const '[')
+  , (is '/', const ']')
+ --  , (is '{', const '{')
+ --  , (is '}', const '}')
  -- , (exact "null", const $ Lit JNull)
  -- , (exact "true", const $ Lit (JBool True))
   --, (exact "false", const $ Lit (JBool False))
