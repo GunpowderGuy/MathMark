@@ -103,7 +103,6 @@ var = Var2 <$> terminal (\case Lit (Var2 v) => Just v; _ => Nothing)
 -- Parser entry point
 parse2 : String -> Either (List1 (FileContext, JSParseErr)) JsonTree
 parse2 s = case tokJSON2 s of
-
   Left x  => Left (singleton $ fromBounded Virtual $ map fromVoid x)
   Right x => case parse value2 () x of
     Left es                => Left (fromBounded Virtual <$> es)
@@ -130,4 +129,3 @@ testCases =
   [ 
    [  Symbol '+' ]
   ]
-
