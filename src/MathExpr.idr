@@ -53,7 +53,47 @@ public export %tcinline
 0 JSParseErr : Type
 JSParseErr = ParseError JSToken JSErr
 
-tokJSON2 : String -> Either (Bounded $ ParseError Void Void) (List $ Bounded JSToken)
+
+--
+numberLit : Lexer
+numberLit
+  = let sign  = is '-'
+        whole = is '0' <|> range '1' '9' <+> many digit
+        frac  = is '.' <+> digits
+        exp   = like 'e' <+> opt (oneOf ['+','-']) <+> digits in
+        opt sign <+> whole <+> opt frac <+> opt exp
+
+jsstring : Lexer
+jsstring = quote (is '"') jsonChar
+  where
+    jsonChar : Lexer
+    jsonChar =
+          (is '\\' <+> oneOf ['\\','"','n','f','b','r','t','/'])
+      <|> (exact "\\u" <+> exactly 4 (pred isHexDigit))
+      <|> non (pred isControl <|> is '"' <|> is '\\')
+
+--Compared to these two lexers, the rest is very simple. All we have to do is to collect the lexers in a TokenMap, where lexers are paired with functions for converting the corresponding lexemes to values of type JSToken:
+
+jsonTokenMap : TokenMap JSToken
+jsonTokenMap =
+  [ (spaces, const Space)
+  , (is ',', const ',')
+  , (is ':', const ':')
+  , (is '[', const '[')
+  , (is ']', const ']')
+  , (is '{', const '{')
+  , (is '}', const '}')
+ -- , (exact "null", const $ Lit JNull)
+ -- , (exact "true", const $ Lit (JBool True))
+  --, (exact "false", const $ Lit (JBool False))
+  , (numberLit, Lit . Lit3 . cast . cast {to = String})
+  , (jsstring, Lit . Var2 . cast)
+  ]
+
+tokJSON2 :
+     String
+  -> Either (Bounded $ ParseError Void Void) (List $ Bounded JSToken)
+tokJSON2 = lexManual (first jsonTokenMap)
 
 -- Grammar for mathematical expressions
 
