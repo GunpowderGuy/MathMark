@@ -2,6 +2,9 @@
 *.ttc
 *.ttm
 
+out/
+build/
+
 # Idris 1
 *.ibc
 *.o

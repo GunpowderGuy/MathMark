@@ -164,8 +164,19 @@ runTestCases (t::ts) = do
 
 
 public export
-testCases : List (List JSToken)
-testCases =
+mathTestCases : List (List JSToken)
+mathTestCases =
   [ 
-   [  Symbol '+' ]
+    [Symbol '+'],                 
+    [Symbol '-'],                 
+    [Symbol '*'],                 
+    [Symbol '/'],                
+    [Lit (Lit3 42.0)],           
+    [Lit (Var2 "x")],           
+    [Lit (Lit3 3.14), Symbol '*', Lit (Var2 "x")],
+    [Lit (Var2 "x"), Symbol '+', Lit (Var2 "y")],
+    [Lit (Lit3 10.0), Symbol '+', Lit (Lit3 20.0), Symbol '*', Lit (Lit3 5.0)], 
+    [Symbol '(', Lit (Lit3 10.0), Symbol '+', Lit (Lit3 20.0), Symbol ')', Symbol '*', Lit (Lit3 5.0)],
+    [Symbol '(', Lit (Lit3 10.0), Symbol '+', Symbol '('], 
+    [Lit (Lit3 10.0), Symbol '+' ] 
   ]
