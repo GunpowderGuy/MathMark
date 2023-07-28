@@ -11,23 +11,23 @@ import Data.Either
 %language ElabReflection
 
 public export
-data JsonTree : Type where
-  Lit3 : Double -> JsonTree
-  Add2 : JsonTree -> JsonTree -> JsonTree
-  Sub2 : JsonTree -> JsonTree -> JsonTree
-  Mul2 : JsonTree -> JsonTree -> JsonTree
-  Div2 : JsonTree -> JsonTree -> JsonTree
-  Var2 : String -> JsonTree
+data MathExpr : Type where
+  Lit3 : Double -> MathExpr
+  Add2 : MathExpr -> MathExpr -> MathExpr
+  Sub2 : MathExpr -> MathExpr -> MathExpr
+  Mul2 : MathExpr -> MathExpr -> MathExpr
+  Div2 : MathExpr -> MathExpr -> MathExpr
+  Var2 : String -> MathExpr
 
-%runElab derive "JsonTree" [Show, Eq]
+%runElab derive "MathExpr" [Show, Eq]
 
 public export
-data JSToken : Type where
-  Symbol   : Char -> JSToken
-  Lit      : JsonTree -> JSToken
-  Space    : JSToken
+data MathToken : Type where
+  Symbol   : Char -> MathToken
+  Lit      : MathExpr -> MathToken
+  Space    : MathToken
 
-%runElab derive "JSToken" [Show, Eq]
+%runElab derive "MathToken" [Show, Eq]
 
 public export
 data JSErr : Type where
@@ -36,11 +36,11 @@ data JSErr : Type where
 %runElab derive "JSErr" [Show, Eq]
 
 public export %inline
-fromChar : Char -> JSToken
+fromChar : Char -> MathToken
 fromChar = Symbol
 
 export
-Interpolation JSToken where
+Interpolation MathToken where
   interpolate (Symbol c) = show c
   interpolate (Lit x)    = "'\{show x}'"
   interpolate Space      = "<spaces>"
@@ -51,7 +51,7 @@ Interpolation JSErr where
 
 public export %tcinline
 0 JSParseErr : Type
-JSParseErr = ParseError JSToken JSErr
+JSParseErr = ParseError MathToken JSErr
 
 
 --
@@ -72,9 +72,9 @@ jsstring = quote (is '"') jsonChar
       <|> (exact "\\u" <+> exactly 4 (pred isHexDigit))
       <|> non (pred isControl <|> is '"' <|> is '\\')
 
---Compared to these two lexers, the rest is very simple. All we have to do is to collect the lexers in a TokenMap, where lexers are paired with functions for converting the corresponding lexemes to values of type JSToken:
+--Compared to these two lexers, the rest is very simple. All we have to do is to collect the lexers in a TokenMap, where lexers are paired with functions for converting the corresponding lexemes to values of type MathToken:
 
-jsonTokenMap : TokenMap JSToken
+jsonTokenMap : TokenMap MathToken
 jsonTokenMap =
   [ (spaces, const Space)
   , (is '+', const ',')
@@ -92,31 +92,31 @@ jsonTokenMap =
 
 tokJSON2 :
      String
-  -> Either (Bounded $ ParseError Void Void) (List $ Bounded JSToken)
+  -> Either (Bounded $ ParseError Void Void) (List $ Bounded MathToken)
 tokJSON2 = lexManual (first jsonTokenMap)
 
 -- Grammar for mathematical expressions
 
 0 Rule2 : Bool -> Type -> Type
-Rule2 b t = Grammar b () JSToken JSErr t
+Rule2 b t = Grammar b () MathToken JSErr t
 
 
-lit : Rule2 True JsonTree
+lit : Rule2 True MathExpr
 
-sub : Rule2 True JsonTree
+sub : Rule2 True MathExpr
 
-sum : Rule2 True JsonTree
+sum : Rule2 True MathExpr
 
-mul : Rule2 True JsonTree
+mul : Rule2 True MathExpr
 
-var : Rule2 True JsonTree
+var : Rule2 True MathExpr
 
-div : Rule2 True JsonTree
+div : Rule2 True MathExpr
 
 
 -- Recursive parser for mathematical expressions
 partial
-value2 : Rule2 True JsonTree
+value2 : Rule2 True MathExpr
 value2 = lit <|> sub <|> sum <|> mul <|> div <|> var
 
 
@@ -125,7 +125,7 @@ lit = terminal $ \case Lit j => Just j; _ => Nothing
 
 sub = Sub2 <$> lit <*> (is '-' *> value2)
 
-add2 : Rule2 True JsonTree
+add2 : Rule2 True MathExpr
 add2 = Add2 <$> lit <*> (is '+' *> value2)
 
 
@@ -141,7 +141,7 @@ div = Div2 <$> lit <*> (is '/' *> value2)
 var = Var2 <$> terminal (\case Lit (Var2 v) => Just v; _ => Nothing)
 
 -- Parser entry point
-parse2 : String -> Either (List1 (FileContext, JSParseErr)) JsonTree
+parse2 : String -> Either (List1 (FileContext, JSParseErr)) MathExpr
 parse2 s = case tokJSON2 s of
   Left x  => Left (singleton $ fromBounded Virtual $ map fromVoid x)
   Right x => case parse value2 () x of
@@ -154,17 +154,17 @@ testParse2 : String -> IO ()
 testParse2 s = putStrLn $ either (printParseErrors s) show (parse2 s)
 
 public export
-runTestCases : List (List JSToken) -> IO ()
+runTestCases : List (List MathToken) -> IO ()
 runTestCases [] = putStrLn "All test cases passed!"
 runTestCases (t::ts) = do
   putStrLn ("Running test case: " ++ show t)
-  testParse2 (concatMap show t) -- Convert the list of JSToken to a String
+  testParse2 (concatMap show t) -- Convert the list of MathToken to a String
   putStrLn ""
   runTestCases ts
 
 
 public export
-mathTestCases : List (List JSToken)
+mathTestCases : List (List MathToken)
 mathTestCases =
   [ 
     [Symbol '+'],                 
