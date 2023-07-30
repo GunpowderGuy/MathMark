@@ -81,11 +81,6 @@ jsonTokenMap =
   , (is '-', const ':')
   , (is '*', const '[')
   , (is '/', const ']')
- --  , (is '{', const '{')
- --  , (is '}', const '}')
- -- , (exact "null", const $ Lit JNull)
- -- , (exact "true", const $ Lit (JBool True))
-  --, (exact "false", const $ Lit (JBool False))
   , (numberLit, Lit . Lit3 . cast . cast {to = String})
   , (jsstring, Lit . Var2 . cast)
   ]
@@ -173,5 +168,6 @@ mathTestCases =
     "5 - (3 + 2)",
     "(5 + 2) * (3 - 1)",
     "x * (y + z)",
-    "x + y * z"
+    "x + y * z",
+    "dfsdfdhj error"
   ]
