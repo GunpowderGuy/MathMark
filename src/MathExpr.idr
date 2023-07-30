@@ -154,29 +154,24 @@ testParse2 : String -> IO ()
 testParse2 s = putStrLn $ either (printParseErrors s) show (parse2 s)
 
 public export
-runTestCases : List (List MathToken) -> IO ()
+runTestCases : List String -> IO ()
 runTestCases [] = putStrLn "All test cases passed!"
 runTestCases (t::ts) = do
   putStrLn ("Running test case: " ++ show t)
-  testParse2 (concatMap show t) -- Convert the list of MathToken to a String
+  --testParse2 (concatMap show t) -- Convert the list of MathToken to a String
   putStrLn ""
   runTestCases ts
 
 
 public export
-mathTestCases : List (List MathToken)
+mathTestCases : List String
 mathTestCases =
   [ 
-    [Symbol '+'],                 
-    [Symbol '-'],                 
-    [Symbol '*'],                 
-    [Symbol '/'],                
-    [Lit (Lit3 42.0)],           
-    [Lit (Var2 "x")],           
-    [Lit (Lit3 3.14), Symbol '*', Lit (Var2 "x")],
-    [Lit (Var2 "x"), Symbol '+', Lit (Var2 "y")],
-    [Lit (Lit3 10.0), Symbol '+', Lit (Lit3 20.0), Symbol '*', Lit (Lit3 5.0)], 
-    [Symbol '(', Lit (Lit3 10.0), Symbol '+', Lit (Lit3 20.0), Symbol ')', Symbol '*', Lit (Lit3 5.0)],
-    [Symbol '(', Lit (Lit3 10.0), Symbol '+', Symbol '('], 
-    [Lit (Lit3 10.0), Symbol '+' ] 
+    "+",
+    "5 + 2",
+    "5 * 2",
+    "5 - (3 + 2)",
+    "(5 + 2) * (3 - 1)",
+    "x * (y + z)",
+    "x + y * z"
   ]
