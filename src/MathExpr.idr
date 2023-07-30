@@ -77,10 +77,10 @@ jsstring = quote (is '"') jsonChar
 jsonTokenMap : TokenMap MathToken
 jsonTokenMap =
   [ (spaces, const Space)
-  , (is '+', const ',')
-  , (is '-', const ':')
-  , (is '*', const '[')
-  , (is '/', const ']')
+  , (is '+', const '+')
+  , (is '-', const '-')
+  , (is '*', const '*')
+  , (is '/', const '/')
   , (numberLit, Lit . Lit3 . cast . cast {to = String})
   , (jsstring, Lit . Var2 . cast)
   ]
@@ -145,6 +145,7 @@ parse2 s = case tokJSON2 s of
     Right ((), _, (x::xs)) => Left (singleton $ fromBounded Virtual $ Unexpected . Right <$> x)
 
 
+public export
 testParse2 : String -> IO ()
 testParse2 s = putStrLn $ either (printParseErrors s) show (parse2 s)
 

@@ -24,4 +24,4 @@ main = do
   --checkPrettyPrint supExample "<msup><mi>x</mi><mn>2</mn></msup>"
   --checkPrettyPrint fracSupExample "<mfrac><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup></mfrac>"
   --testParse2 jsonStr
-  runTestCases mathTestCases
+  testParse2 "1+2"
