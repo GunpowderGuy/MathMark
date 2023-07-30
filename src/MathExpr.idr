@@ -77,10 +77,10 @@ jsstring = quote (is '"') jsonChar
 jsonTokenMap : TokenMap MathToken
 jsonTokenMap =
   [ (spaces, const Space)
-  , (is '+', const '+')
-  , (is '-', const '-')
-  , (is '*', const '*')
-  , (is '/', const '/')
+  , (is '+', const (Symbol '+'))
+  , (is '-', const (Symbol '-'))
+  , (is '*', const (Symbol '*'))
+  , (is '/', const (Symbol '/'))
   , (numberLit, Lit . Lit3 . cast . cast {to = String})
   , (jsstring, Lit . Var2 . cast)
   ]

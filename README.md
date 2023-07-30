@@ -1,7 +1,7 @@
 # MathMark
 Mathematical extension for markdown
 
-
+Built with https://github.com/stefan-hoeck/idris2-parser
 
 Resources
 
