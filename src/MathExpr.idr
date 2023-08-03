@@ -81,6 +81,8 @@ jsonTokenMap =
   , (is '-', const (Symbol '-'))
   , (is '*', const (Symbol '*'))
   , (is '/', const (Symbol '/'))
+  , (is '(', const (Symbol '('))
+  , (is ')', const (Symbol ')'))
   , (numberLit, Lit . Lit3 . cast . cast {to = String})
   , (jsstring, Lit . Var2 . cast)
   ]
@@ -117,29 +119,34 @@ value2 = lit <|> sub <|> sum <|> mul <|> div <|> var
 
 lit = terminal $ \case Lit j => Just j; _ => Nothing
 
+var = Var2 <$> terminal (\case Lit (Var2 v) => Just v; _ => Nothing)
+atom = lit <|> var <|> is '(' *> sum <* is ')'
+div = foldl Div2 <$> atom <*> many (is '/' *> atom)
+mul = foldl Mul2 <$> div <*> many (is '*' *> div)
+sub = foldl Sub2 <$> mul <*> many (is '-' *> mul)
+sum = foldl Add2 <$> sub <*> many (is '+' *> sub)
 
+{-
 sub = Sub2 <$> lit <*> (is '-' *> value2)
 
 add2 : Rule2 True MathExpr
 add2 = Add2 <$> lit <*> (is '+' *> value2)
 
-
 sum = add2 <|> value2
-
 
 mul = Mul2 <$> lit <*> (is '*' *> value2)
 
-
 div = Div2 <$> lit <*> (is '/' *> value2)
 
-
 var = Var2 <$> terminal (\case Lit (Var2 v) => Just v; _ => Nothing)
+-}
 
 -- Parser entry point
 parse2 : String -> Either (List1 (FileContext, JSParseErr)) MathExpr
 parse2 s = case tokJSON2 s of
   Left x  => Left (singleton $ fromBounded Virtual $ map fromVoid x)
-  Right x => case parse value2 () x of
+--Right x => case parse value2 () x of
+  Right x => case parse sum () x of
     Left es                => Left (fromBounded Virtual <$> es)
     Right ((), res, [])    => Right res
     Right ((), _, (x::xs)) => Left (singleton $ fromBounded Virtual $ Unexpected . Right <$> x)
