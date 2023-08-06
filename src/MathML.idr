@@ -1,10 +1,8 @@
 module MathML
 
-import Data.List
 import Derive.Prelude
 
-import MathExpr
-
+import Expr
 
 %default total
 %language ElabReflection
@@ -29,13 +27,13 @@ data MathML : Type where
 %runElab derive "MathML" [Show,Eq]
 
 
-public export
+export
 partial
 prettyPrintMathML : MathML -> String
 prettyPrintMathML (Mrow children) = "<mrow>" ++ concatMap prettyPrintMathML children ++ "</mrow>"
 prettyPrintMathML (Mfrac num denom) = "<mfrac>" ++ prettyPrintMathML num ++ prettyPrintMathML denom ++ "</mfrac>"
 prettyPrintMathML (Msqrt expr) = "<msqrt>" ++ prettyPrintMathML expr ++ "</msqrt>"
-prettyPrintMathML (Mroot base degree expr) = "<mroot>" ++ prettyPrintMathML base ++ prettyPrintMathML degree ++ prettyPrintMathML expr ++ "</mroot>"
+prettyPrintMathML (Mroot base degree expr) = "<mroot>" ++ prettyPrintMathML base ++ prettyPrintMathML degree ++ prettyPrintMathML expr ++ "</mroot>" -- check whether this printing is correct
 prettyPrintMathML (Msub base subscript) = "<msub>" ++ prettyPrintMathML base ++ prettyPrintMathML subscript ++ "</msub>"
 prettyPrintMathML (Msup base superscript) = "<msup>" ++ prettyPrintMathML base ++ prettyPrintMathML superscript ++ "</msup>"
 prettyPrintMathML (Msubsup base subscript superscript) = "<msubsup>" ++ prettyPrintMathML base ++ prettyPrintMathML subscript ++ prettyPrintMathML superscript ++ "</msubsup>"
@@ -46,7 +44,7 @@ prettyPrintMathML (Mo op) = "<mo>" ++ op ++ "</mo>"
 prettyPrintMathML (Mi ident) = "<mi>" ++ ident ++ "</mi>"
 prettyPrintMathML (Mn num) = "<mn>" ++ num ++ "</mn>"
 
-public export
+export
 total
 mathExprToMathML : MathExpr -> MathML
 mathExprToMathML (Lit3 x) = Mn (show x)

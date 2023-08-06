@@ -2,7 +2,7 @@ module Main
 
 import MathML
 import MathMLExamples
-import MathExpr
+import Expr
 
 -- Function to check the expected output of the pretty printer
 
