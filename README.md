@@ -9,6 +9,9 @@ Resources
 https://www.w3.org/TR/mathml-core/
 
 
+https://typst.app/docs/reference/math/
+
+
 https://github.com/stefan-hoeck/idris2-dom-mvc
 
 
