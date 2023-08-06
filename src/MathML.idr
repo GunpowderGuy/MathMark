@@ -3,6 +3,7 @@ module MathML
 import Data.List
 import Derive.Prelude
 
+import MathExpr
 
 
 %default total
@@ -45,3 +46,12 @@ prettyPrintMathML (Mo op) = "<mo>" ++ op ++ "</mo>"
 prettyPrintMathML (Mi ident) = "<mi>" ++ ident ++ "</mi>"
 prettyPrintMathML (Mn num) = "<mn>" ++ num ++ "</mn>"
 
+public export
+total
+mathExprToMathML : MathExpr -> MathML
+mathExprToMathML (Lit3 x) = Mn (show x)
+mathExprToMathML (Add2 e1 e2) = Mrow [mathExprToMathML e1, Mo "+", mathExprToMathML e2]
+mathExprToMathML (Sub2 e1 e2) = Mrow [mathExprToMathML e1, Mo "-", mathExprToMathML e2]
+mathExprToMathML (Mul2 e1 e2) = Mrow [mathExprToMathML e1, Mo "*", mathExprToMathML e2]
+mathExprToMathML (Div2 e1 e2) = Mfrac (mathExprToMathML e1) (mathExprToMathML e2)
+mathExprToMathML (Var2 v) = Mi v
