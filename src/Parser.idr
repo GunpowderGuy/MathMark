@@ -32,6 +32,7 @@ jsstring = quote (is '"') jsonChar
 
 --Compared to these two lexers, the rest is very simple. All we have to do is to collect the lexers in a TokenMap, where lexers are paired with functions for converting the corresponding lexemes to values of type MathToken:
 
+public export
 jsonTokenMap : TokenMap MathToken
 jsonTokenMap =
   [ (spaces, const Space)
@@ -100,6 +101,7 @@ var = Var2 <$> terminal (\case Lit (Var2 v) => Just v; _ => Nothing)
 -}
 
 -- Parser entry point
+public export
 parse2 : String -> Either (List1 (FileContext, JSParseErr)) MathExpr
 parse2 s = case tokJSON2 s of
   Left x  => Left (singleton $ fromBounded Virtual $ map fromVoid x)
