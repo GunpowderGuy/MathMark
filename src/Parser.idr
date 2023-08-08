@@ -12,6 +12,10 @@ import Data.Either
 public export %tcinline
 0 JSParseErr : Type
 JSParseErr = ParseError MathToken JSErr
+
+
+--%runElab derive "MathML" [Show,Eq]
+
 --
 numberLit : Lexer
 numberLit
@@ -126,16 +130,3 @@ runTestCases (t::ts) = do
   runTestCases ts
 
 
-public export
-mathTestCases : List String
-mathTestCases =
-  [ 
-    "+",
-    "5 + 2",
-    "5 * 2",
-    "5 - (3 + 2)",
-    "(5 + 2) * (3 - 1)",
-    "x * (y + z)",
-    "x + y * z",
-    "dfsdfdhj error"
-  ]

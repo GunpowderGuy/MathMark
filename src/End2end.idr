@@ -1,16 +1,35 @@
 module End2end
 
-import Parser
+import public Parser
 import MathML
 import Expr
 
-import Data.List1
-import Text.Parse
+import public Data.List1--
+import public Text.Parse -- encapsulation might be breaking down 
 
 
-
--- Combine parsing, conversion to MathML, and conversion to string
-convertMathExprToMathMLString : String -> Either (List1 (FileContext, JSParseErr)) MathML
+convertMathExprToMathMLString : String -> Either (List1 (FileContext, JSParseErr)) String
 --convertMathExprToMathMLString formula = (parse2 formula) <*> pure ( mathExprToMathML second) 
-convertMathExprToMathMLString formula = mathExprToMathML <$> parse2 formula
+convertMathExprToMathMLString formula = prettyPrintMathML <$> mathExprToMathML <$> parse2 formula 
 
+
+
+public export
+mathTestCases : List String
+mathTestCases =
+  [ 
+    "+",
+    "5 + 2",
+    "5 * 2",
+    "5 - (3 + 2)",
+    "(5 + 2) * (3 - 1)",
+    "x * (y + z)",
+    "x + y * z",
+    "dfsdfdhj error"
+  ]
+
+public export
+runTests : Either (List1 (FileContext, JSParseErr)) String
+runTests =
+  let num = 2 + 3
+  in convertMathExprToMathMLString "5 - 2"
