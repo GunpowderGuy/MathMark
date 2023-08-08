@@ -16,9 +16,12 @@ main : IO ()
 main = do
 
 
-  let out : String = case runTests of
-            Left s => "error"
-            Right text => text
-
+  --let out = case runTests of
+  --          Left s => (printParseErrors "d") -- returns a string, doesnt actually prints
+  --          Right text => (printParseErrors text) -- returns a string, doesnt actually prints
+  
+  --let s = convertMathExprToMathMLString
+  --let out = either show (printParseErrors s) show (parse2 s)
+  
  
-  putStrLn out
+  putStrLn (tryComplete "1+9")

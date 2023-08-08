@@ -1,7 +1,7 @@
 module Expr
 
 --import Data.List1
-import Derive.Prelude
+import public Derive.Prelude
 --import Text.Lex
 --import Text.Parse
 --import Text.Parse.Manual
@@ -48,3 +48,4 @@ Interpolation MathToken where
 export
 Interpolation JSErr where
   interpolate ExpectedString  = "Expected string literal"
+

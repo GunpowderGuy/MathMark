@@ -1,6 +1,6 @@
 module Parser
 
-import Expr
+import public Expr
 
 import Data.List1
 --import Derive.Prelude
@@ -9,14 +9,16 @@ import Text.Parse
 import Text.Parse.Manual
 import Data.Either
 
+%language ElabReflection
+
+
 public export %tcinline
 0 JSParseErr : Type
 JSParseErr = ParseError MathToken JSErr
 
+--%runElab derive "JSParseErr" [Show,Eq]
 
---%runElab derive "MathML" [Show,Eq]
 
---
 numberLit : Lexer
 numberLit
   = let sign  = is '-'
@@ -116,9 +118,12 @@ parse2 s = case tokJSON2 s of
     Right ((), _, (x::xs)) => Left (singleton $ fromBounded Virtual $ Unexpected . Right <$> x)
 
 
-public export
-testParse2 : String -> IO ()
-testParse2 s = putStrLn $ either (printParseErrors s) show (parse2 s)
+--public export
+--testParse2 : String -> IO ()
+--testParse2 s = putStrLn $ either (printParseErrors s) show (parse2 s)
+
+tryParse2 : String -> String
+tryParse2 s = either (printParseErrors s) show (parse2 s)
 
 public export
 runTestCases : List String -> IO ()
