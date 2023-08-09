@@ -24,4 +24,4 @@ main = do
   --let out = either show (printParseErrors s) show (parse2 s)
   
  
-  putStrLn (tryComplete "2^8")
+  putStrLn (tryComplete "2^(8+1)")
