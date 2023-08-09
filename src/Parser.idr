@@ -48,6 +48,7 @@ jsonTokenMap =
   , (is '/', const (Symbol '/'))
   , (is '(', const (Symbol '('))
   , (is ')', const (Symbol ')'))
+  , (is '^', const (Symbol '^'))
   , (numberLit, Lit . Lit3 . cast . cast {to = String})
   , (jsstring, Lit . Var2 . cast)
   ]
@@ -86,7 +87,8 @@ lit = terminal $ \case Lit j => Just j; _ => Nothing
 
 var = Var2 <$> terminal (\case Lit (Var2 v) => Just v; _ => Nothing)
 atom = lit <|> var <|> is '(' *> sum <* is ')'
-div = foldl Div2 <$> atom <*> many (is '/' *> atom)
+pow = foldl Pow2 <$> atom <*> many (is '^' *> atom)
+div = foldl Div2 <$> pow <*> many (is '/' *> atom)
 mul = foldl Mul2 <$> div <*> many (is '*' *> div)
 sub = foldl Sub2 <$> mul <*> many (is '-' *> mul)
 sum = foldl Add2 <$> sub <*> many (is '+' *> sub)

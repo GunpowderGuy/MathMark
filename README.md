@@ -20,4 +20,3 @@ https://github.com/stefan-hoeck/idris2-dom
 https://idris2.readthedocs.io/en/latest/cookbook/parsing.html
 
 
-https://typst.app/docs/reference/math/

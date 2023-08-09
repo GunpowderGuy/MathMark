@@ -18,6 +18,7 @@ data MathExpr : Type where
   Mul2 : MathExpr -> MathExpr -> MathExpr
   Div2 : MathExpr -> MathExpr -> MathExpr
   Var2 : String -> MathExpr
+  Pow2 : MathExpr -> MathExpr -> MathExpr
 
 %runElab derive "MathExpr" [Show, Eq]
 
