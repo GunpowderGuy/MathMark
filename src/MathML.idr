@@ -23,6 +23,9 @@ data MathML : Type where
   Mo : String -> MathML
   Mi : String -> MathML
   Mn : String -> MathML
+  Mtable : List MathML -> MathML -- https://danielscully.uk/projects/mathml-guide/vectorsmatrices.php
+  Mtr : List MathML -> MathML
+  Mtd : MathML -> MathML -- should i use refinement types here to declare which child elements are allowed?
 
 %runElab derive "MathML" [Show,Eq]
 
@@ -43,6 +46,33 @@ prettyPrintMathML (Munderover base underscript overscript) = "<munderover>" ++ p
 prettyPrintMathML (Mo op) = "<mo>" ++ op ++ "</mo>"
 prettyPrintMathML (Mi ident) = "<mi>" ++ ident ++ "</mi>"
 prettyPrintMathML (Mn num) = "<mn>" ++ num ++ "</mn>"
+prettyPrintMathML (Mtable row) = "<mtable>" ++ concatMap prettyPrintMathML row ++ "</mtable>"  --TODO
+prettyPrintMathML (Mtr column) = "<mtr>" ++ concatMap prettyPrintMathML column ++ "</mtr>"  --TODO
+prettyPrintMathML (Mtd elem) = "<mtd>" ++ prettyPrintMathML elem ++ "<mtd/>" 
+--prettyPrintMathML _ = "<mtable>" ++ "</mtable>"  --TODO
+
+{- 
+
+ <mrow>
+    <mo>(</mo>
+    <mtable>
+      <mtr>
+        <mtd>
+          <mi>x</mi>
+        </mtd>
+      </mtr>
+      <mtr>
+        <mtd>
+          <mi>y</mi>
+        </mtd>
+      </mtr>
+    </mtable>
+    <mo>)</mo>
+  </mrow>
+
+-}
+  
+
 
 export
 total
@@ -54,3 +84,4 @@ mathExprToMathML (Mul2 e1 e2) = Mrow [mathExprToMathML e1, Mo "*", mathExprToMat
 mathExprToMathML (Div2 e1 e2) = Mfrac (mathExprToMathML e1) (mathExprToMathML e2)
 mathExprToMathML (Pow2 e1 e2) = Msup (mathExprToMathML e1) (mathExprToMathML e2)
 mathExprToMathML (Var2 v) = Mi v
+
