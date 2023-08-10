@@ -84,4 +84,5 @@ mathExprToMathML (Mul2 e1 e2) = Mrow [mathExprToMathML e1, Mo "*", mathExprToMat
 mathExprToMathML (Div2 e1 e2) = Mfrac (mathExprToMathML e1) (mathExprToMathML e2)
 mathExprToMathML (Pow2 e1 e2) = Msup (mathExprToMathML e1) (mathExprToMathML e2)
 mathExprToMathML (Var2 v) = Mi v
+mathExprToMathML _ = Mn "d"
 

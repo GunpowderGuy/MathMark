@@ -49,6 +49,9 @@ jsonTokenMap =
   , (is '(', const (Symbol '('))
   , (is ')', const (Symbol ')'))
   , (is '^', const (Symbol '^'))
+  , (is '[', const (Symbol '['))
+  , (is ']', const (Symbol ']'))
+  , (is ',', const (Symbol ','))
   , (numberLit, Lit . Lit3 . cast . cast {to = String})
   , (jsstring, Lit . Var2 . cast)
   ]
@@ -76,22 +79,34 @@ var : Rule2 True MathExpr
 
 div : Rule2 True MathExpr
 
+covering
+array2 : Rule2 True MathExpr
+
 
 -- Recursive parser for mathematical expressions
-partial
-value2 : Rule2 True MathExpr
-value2 = lit <|> sub <|> sum <|> mul <|> div <|> var
+--partial
+--value2 : Rule2 True MathExpr
+--value2 = lit <|> sub <|> sum <|> mul <|> div <|> var
+
 
 
 lit = terminal $ \case Lit j => Just j; _ => Nothing
 
 var = Var2 <$> terminal (\case Lit (Var2 v) => Just v; _ => Nothing)
 atom = lit <|> var <|> is '(' *> sum <* is ')'
-pow = foldl Pow2 <$> atom <*> many (is '^' *> atom)
+pow = foldl Pow2 <$> array2 <*> many (is '^' *> atom)
 div = foldl Div2 <$> pow <*> many (is '/' *> atom)
 mul = foldl Mul2 <$> div <*> many (is '*' *> div)
 sub = foldl Sub2 <$> mul <*> many (is '-' *> mul)
 sum = foldl Add2 <$> sub <*> many (is '+' *> sub)
+
+--array2 : Parser MathExpr
+--array2 = do
+ -- elements <- between (is '[') (is ']') (sepBy (is ',') atom)
+ -- pure (Vector2 elements)
+
+array2 = Vector2 <$> between (is '[') (is ']') (sepBy (is ',') atom)
+--array2 = Vector2 <$> between (is '[') (is ']') (sepBy (is ',') sum)
 
 {-
 sub = Sub2 <$> lit <*> (is '-' *> value2)
@@ -115,6 +130,7 @@ parse2 s = case tokJSON2 s of
   Left x  => Left (singleton $ fromBounded Virtual $ map fromVoid x)
 --Right x => case parse value2 () x of
   Right x => case parse sum () x of
+    --Right x => case parse array () x of 
     Left es                => Left (fromBounded Virtual <$> es)
     Right ((), res, [])    => Right res
     Right ((), _, (x::xs)) => Left (singleton $ fromBounded Virtual $ Unexpected . Right <$> x)

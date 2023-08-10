@@ -16,5 +16,5 @@ main : IO ()
 main = do
   
  
-  putStrLn (tryComplete "3*2^(8+1)-2")
+  putStrLn (tryComplete "[3,7]")
   --putStrLn 
