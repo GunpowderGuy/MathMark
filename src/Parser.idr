@@ -90,23 +90,37 @@ array2 : Rule2 True MathExpr
 
 
 
-lit = terminal $ \case Lit j => Just j; _ => Nothing
+--lit : Parser MathExpr
+lit = terminal $ \case
+  Lit j => Just j
+  _     => Nothing
 
-var = Var2 <$> terminal (\case Lit (Var2 v) => Just v; _ => Nothing)
-atom = lit <|> var <|> is '(' *> sum <* is ')'
-pow = foldl Pow2 <$> array2 <*> many (is '^' *> atom)
-div = foldl Div2 <$> pow <*> many (is '/' *> atom)
+--var : Parser MathExpr
+var = Var2 <$> terminal (\case
+  Lit (Var2 v) => Just v
+  _            => Nothing)
+
+--atom : Parser MathExpr
+atom = array2 <|> lit <|> var <|> is '(' *> sum <* is ')'
+
+--pow : Parser MathExpr
+pow = foldl Pow2 <$> atom <*> many (is '^' *> atom)
+
+--div : Parser MathExpr
+div = foldl Div2 <$> pow <*> many (is '/' *> pow)
+
+--mul : Parser MathExpr
 mul = foldl Mul2 <$> div <*> many (is '*' *> div)
+
+--sub : Parser MathExpr
 sub = foldl Sub2 <$> mul <*> many (is '-' *> mul)
+
+--sum : Parser MathExpr
 sum = foldl Add2 <$> sub <*> many (is '+' *> sub)
 
 --array2 : Parser MathExpr
---array2 = do
- -- elements <- between (is '[') (is ']') (sepBy (is ',') atom)
- -- pure (Vector2 elements)
+array2 = Vector2 <$> between (is '[') (is ']') (sepBy (is ',') sum)
 
-array2 = Vector2 <$> between (is '[') (is ']') (sepBy (is ',') atom)
---array2 = Vector2 <$> between (is '[') (is ']') (sepBy (is ',') sum)
 
 {-
 sub = Sub2 <$> lit <*> (is '-' *> value2)
