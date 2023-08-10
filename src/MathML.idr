@@ -75,7 +75,7 @@ prettyPrintMathML (Mtd elem) = "<mtd>" ++ prettyPrintMathML elem ++ "<mtd/>"
 
 
 export
-total
+partial
 mathExprToMathML : MathExpr -> MathML
 mathExprToMathML (Lit3 x) = Mn (show x)
 mathExprToMathML (Add2 e1 e2) = Mrow [mathExprToMathML e1, Mo "+", mathExprToMathML e2]
@@ -84,5 +84,7 @@ mathExprToMathML (Mul2 e1 e2) = Mrow [mathExprToMathML e1, Mo "*", mathExprToMat
 mathExprToMathML (Div2 e1 e2) = Mfrac (mathExprToMathML e1) (mathExprToMathML e2)
 mathExprToMathML (Pow2 e1 e2) = Msup (mathExprToMathML e1) (mathExprToMathML e2)
 mathExprToMathML (Var2 v) = Mi v
+--mathExprToMathML (Vector2 row) = Mrow (map mathExprToMathML row) -- makes function partial
+mathExprToMathML (Vector2 row) = Mrow [Mo "[", Mtable (map (\e => Mtr [mathExprToMathML e]) row), Mo "]"]
 mathExprToMathML _ = Mn "d"
 
