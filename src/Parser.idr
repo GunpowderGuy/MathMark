@@ -36,6 +36,10 @@ jsstring = quote (is '"') jsonChar
       <|> (exact "\\u" <+> exactly 4 (pred isHexDigit))
       <|> non (pred isControl <|> is '"' <|> is '\\')
 
+sumKeyword : Lexer
+sumKeyword = exact "sum"
+
+
 --Compared to these two lexers, the rest is very simple. All we have to do is to collect the lexers in a TokenMap, where lexers are paired with functions for converting the corresponding lexemes to values of type MathToken:
 
 public export
@@ -54,6 +58,7 @@ jsonTokenMap =
   , (is ',', const (Symbol ','))
   , (numberLit, Lit . Lit3 . cast . cast {to = String})
   , (jsstring, Lit . Var2 . cast)
+  , (sumKeyword, const (Symbol 'Σ'))
   ]
 
 tokJSON2 :
