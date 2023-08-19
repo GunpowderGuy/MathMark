@@ -16,5 +16,5 @@ main : IO ()
 main = do
   
  
-  putStrLn (tryComplete "[3^3,7+2]")
+  putStrLn (tryComplete "summation 1 2 3")
   --putStrLn 

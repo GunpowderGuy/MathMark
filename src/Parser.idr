@@ -37,7 +37,7 @@ jsstring = quote (is '"') jsonChar
       <|> non (pred isControl <|> is '"' <|> is '\\')
 
 sumKeyword : Lexer
-sumKeyword = exact "sum"
+sumKeyword = exact "summation"
 
 
 --Compared to these two lexers, the rest is very simple. All we have to do is to collect the lexers in a TokenMap, where lexers are paired with functions for converting the corresponding lexemes to values of type MathToken:
@@ -56,9 +56,10 @@ jsonTokenMap =
   , (is '[', const (Symbol '['))
   , (is ']', const (Symbol ']'))
   , (is ',', const (Symbol ','))
+  , (sumKeyword, const (Symbol 'Σ'))
   , (numberLit, Lit . Lit3 . cast . cast {to = String})
   , (jsstring, Lit . Var2 . cast)
-  , (sumKeyword, const (Symbol 'Σ'))
+  
   ]
 
 tokJSON2 :
@@ -84,6 +85,8 @@ var : Rule2 True MathExpr
 
 div : Rule2 True MathExpr
 
+summation : Rule2 True MathExpr
+
 covering
 array2 : Rule2 True MathExpr
 
@@ -106,10 +109,15 @@ var = Var2 <$> terminal (\case
   _            => Nothing)
 
 --atom : Parser MathExpr
-atom = array2 <|> lit <|> var <|> is '(' *> sum <* is ')'
+atom =  array2 <|> lit <|> var <|> is '(' *> sum <* is ')'
+
+
+--summation = foldl Pow2 <$> between (is '∑') (is '∑') (sepBy (is ',') atom)
+
+summation = Summation2 <$> (is '∑' *> sum <* is ',') <*> (sum <* is ',') <*> (sum <* is '∑')
 
 --pow : Parser MathExpr
-pow = foldl Pow2 <$> atom <*> many (is '^' *> atom)
+pow = foldl Pow2 <$> summation <*> many (is '^' *> summation)
 
 --div : Parser MathExpr
 div = foldl Div2 <$> pow <*> many (is '/' *> pow)
@@ -127,7 +135,8 @@ sum = foldl Add2 <$> sub <*> many (is '+' *> sub)
 array2 = Vector2 <$> between (is '[') (is ']') (sepBy (is ',') sum)
 
 
-{-
+
+{- 
 sub = Sub2 <$> lit <*> (is '-' *> value2)
 
 add2 : Rule2 True MathExpr
