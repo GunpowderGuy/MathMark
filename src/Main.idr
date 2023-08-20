@@ -19,7 +19,7 @@ mathTestCases2 =
     "5 - (3 + 2)",
     "(5 + 2) * (3 - 1)",
     "x * (y + z)",
-    "x + y * z",
+    " + y * z",
     "dfsdfdhj error"
   ]
 
@@ -32,7 +32,7 @@ main = do
   putStrLn (tryComplete  "x+y*z")
   putStrLn (tryComplete "5+2")
   putStrLn (tryComplete "x * (y + z)")
-  putStrLn (tryComplete "error")
+  putStrLn (tryComplete "\"x\"+\"y\"")
   
 
   
