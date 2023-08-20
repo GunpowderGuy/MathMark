@@ -29,8 +29,8 @@ main = do
   
  
   putStrLn (tryComplete "summation(1,2,3,4)")
-  putStrLn (tryComplete  "x + y * z")
-  putStrLn (tryComplete "5 + 2")
+  putStrLn (tryComplete  "x+y*z")
+  putStrLn (tryComplete "5+2")
   putStrLn (tryComplete "x * (y + z)")
   putStrLn (tryComplete "error")
   

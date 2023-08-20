@@ -109,15 +109,15 @@ var = Var2 <$> terminal (\case
   _            => Nothing)
 
 --atom : Parser MathExpr
-atom =  array2 <|> lit <|> var <|> is '(' *> sum <* is ')'
+atom =  summation  <|> array2 <|> lit <|> var <|> is '(' *> sum <* is ')'
 
 
 --summation = foldl Pow2 <$> between (is '?') (is '?') (sepBy (is ',') atom)
 
-summation = Summation2 <$> (is '?' *> atom <* is ',') <*> (atom <* is ',') <*> (atom <* is ',') <*> (atom <* is ')')
+summation = Summation2 <$> (is '?' *> sum <* is ',') <*> (sum <* is ',') <*> (sum <* is ',') <*> (sum <* is ')')
 
 --pow : Parser MathExpr
-pow = foldl Pow2 <$> summation <*> many (is '^' *> summation)
+pow = foldl Pow2 <$> atom <*> many (is '^' *> atom)
 
 --div : Parser MathExpr
 div = foldl Div2 <$> pow <*> many (is '/' *> pow)
