@@ -114,7 +114,7 @@ atom =  array2 <|> lit <|> var <|> is '(' *> sum <* is ')'
 
 --summation = foldl Pow2 <$> between (is '∑') (is '∑') (sepBy (is ',') atom)
 
-summation = Summation2 <$> (is '∑' *> sum <* is ',') <*> (sum <* is ',') <*> (sum <* is '∑')
+summation = Summation2 <$> (is '∑' *> atom <* is ',') <*> (atom <* is ',') <*> (atom <* is '∑')
 
 --pow : Parser MathExpr
 pow = foldl Pow2 <$> summation <*> many (is '^' *> summation)
