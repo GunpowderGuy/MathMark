@@ -31,7 +31,10 @@ main = do
   putStrLn (tryComplete "summation(1,2,3,4)")
   putStrLn (tryComplete  "x+y*z")
   putStrLn (tryComplete "5+2")
-  putStrLn (tryComplete "x * (y + z)")
+  putStrLn (tryComplete "x*(y+z)")
+  putStrLn (tryComplete "(4+2)/(7-3)")
+  putStrLn (tryComplete "5+3/8-4")
+  putStrLn (tryComplete "(2+3)*3")
   --putStrLn (tryComplete "\"x\"+\"y\"")
   
 

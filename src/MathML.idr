@@ -87,6 +87,8 @@ mathExprToMathML (Var2 v) = Mi v
 --mathExprToMathML (Vector2 row) = Mrow (map mathExprToMathML row) -- makes function partial
 mathExprToMathML (Vector2 row) = Mrow [Mo "[", Mtable (map (\e => Mtr [mathExprToMathML e]) row), Mo "]"]
 --mathExprToMathML (Summation2 index lower upper expression) = Mrow[Munder [Mover [∑], Mrow[Mi[],Mo[],Mn[]],mi[n]],Mi[index],Mo["("],Mi[index]]
+mathExprToMathML (Parentheses2 expr) = Mrow[Mo "(", mathExprToMathML expr, Mo ")"]
+--mathExprToMathML (Parentheses2 expr) = Mrow[Mo "(", Mo ")"]
 mathExprToMathML (Summation2 index lower upper expression) =
   Mrow [
     Munderover (Mo "∑") (Mi "n") (Mn "n")
