@@ -32,7 +32,7 @@ main = do
   putStrLn (tryComplete  "x+y*z")
   putStrLn (tryComplete "5+2")
   putStrLn (tryComplete "x * (y + z)")
-  putStrLn (tryComplete "\"x\"+\"y\"")
+  --putStrLn (tryComplete "\"x\"+\"y\"")
   
 
   

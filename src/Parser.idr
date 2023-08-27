@@ -28,13 +28,13 @@ numberLit
         opt sign <+> whole <+> opt frac <+> opt exp
 
 jsstring : Lexer
-jsstring = quote (is '"') jsonChar
+jsstring = jsonChar
   where
     jsonChar : Lexer
     jsonChar =
           (is '\\' <+> oneOf ['\\','"','n','f','b','r','t','/'])
       <|> (exact "\\u" <+> exactly 4 (pred isHexDigit))
-      <|> non (pred isControl <|> is '"' <|> is '\\')
+      <|> non (pred isControl <|> is '"')
 
 sumKeyword : Lexer
 sumKeyword = exact "summation("
