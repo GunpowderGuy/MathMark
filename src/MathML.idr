@@ -91,21 +91,25 @@ mathExprToMathML (Parentheses2 expr) = Mrow[Mo "(", mathExprToMathML expr, Mo ")
 --mathExprToMathML (Parentheses2 expr) = Mrow[Mo "(", Mo ")"]
 mathExprToMathML (Summation2 index lower upper expression) =
   Mrow [
-    Munderover (Mo "∑") (Mi "n") (Mn "n")
-    ,
+    Munderover (Mo "Sum") (Mi "n1") (Mn "n2")
+    {- 
     Mo "(",
     Mrow [
       Mo "(",
       Mi (prettyPrintMathML (mathExprToMathML index)),
       Mo "=",
-      Mn (show lower),
+      Mn (prettyPrintMathML (mathExprToMathML lower)),
       Mo ")",
       Mo ",",
-      Mn (show upper),
+      Mn (prettyPrintMathML (mathExprToMathML upper)),
       Mo ")"
     ],
     Mo "(",
     mathExprToMathML expression,
     Mo ")",
     Mo ")"
+
+    -}
+    ,Mo "operacion"
   ]
+// lower bound https://en.wikipedia.org/wiki/Summation
