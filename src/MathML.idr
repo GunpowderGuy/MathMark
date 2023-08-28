@@ -112,4 +112,4 @@ mathExprToMathML (Summation2 index lower upper expression) =
     -}
     ,Mo "operacion"
   ]
-// lower bound https://en.wikipedia.org/wiki/Summation
+-- lower bound https://en.wikipedia.org/wiki/Summation
