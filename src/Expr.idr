@@ -21,7 +21,7 @@ data MathExpr : Type where
   Pow2 : MathExpr -> MathExpr -> MathExpr
   Vector2 : List MathExpr -> MathExpr
   Parentheses2 : MathExpr-> MathExpr
-  Summation2 : MathExpr -> MathExpr -> MathExpr -> MathExpr -> MathExpr
+  Summation2 : MathExpr -> MathExpr -> MathExpr -> MathExpr
 
 %runElab derive "MathExpr" [Show, Eq]
 

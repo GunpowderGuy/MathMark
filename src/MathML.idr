@@ -89,7 +89,7 @@ mathExprToMathML (Vector2 row) = Mrow [Mo "[", Mtable (map (\e => Mtr [mathExprT
 --mathExprToMathML (Summation2 index lower upper expression) = Mrow[Munder [Mover [∑], Mrow[Mi[],Mo[],Mn[]],mi[n]],Mi[index],Mo["("],Mi[index]]
 mathExprToMathML (Parentheses2 expr) = Mrow[Mo "(", mathExprToMathML expr, Mo ")"]
 --mathExprToMathML (Parentheses2 expr) = Mrow[Mo "(", Mo ")"]
-mathExprToMathML (Summation2 index lower upper expression) =
+mathExprToMathML (Summation2 lower upper expression) =
   Mrow [
     Munderover (Mo "&sum;") (Mi  ( "i=" ++(prettyPrintMathML (mathExprToMathML lower)) ))  (  Mn (prettyPrintMathML (mathExprToMathML upper ))   )
     {- 
@@ -111,5 +111,6 @@ mathExprToMathML (Summation2 index lower upper expression) =
 
     -}
     ,Mo (prettyPrintMathML (mathExprToMathML expression))
+    ,Mo "="
   ]
 -- lower bound https://en.wikipedia.org/wiki/Summation

@@ -107,7 +107,7 @@ paren = Parentheses2 <$> (is '(' *> sum <* is ')')
 
 array2 = Vector2 <$> between (is '[') (is ']') (sepBy (is ',') sum)
 
-summation = Summation2 <$> (is '?' *> sum <* is ',') <*> (sum <* is ',') <*> (sum <* is ',') <*> (sum <* is ')')
+summation = Summation2 <$> (is '?' *> sum <* is ',') <*> (sum <* is ',') <*> (sum <* is ')')
 
 atom =  summation <|> array2 <|> paren <|> lit <|> var <|> is '(' *> sum <* is ')'
 --summation = foldl Pow2 <$> between (is '?') (is '?') (sepBy (is ',') atom)
