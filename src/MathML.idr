@@ -91,7 +91,7 @@ mathExprToMathML (Parentheses2 expr) = Mrow[Mo "(", mathExprToMathML expr, Mo ")
 --mathExprToMathML (Parentheses2 expr) = Mrow[Mo "(", Mo ")"]
 mathExprToMathML (Summation2 index lower upper expression) =
   Mrow [
-    Munderover (Mo "Sum") (Mi  ( "i=" ++(prettyPrintMathML (mathExprToMathML lower)) ))  (  Mn (prettyPrintMathML (mathExprToMathML upper ))   )
+    Munderover (Mo "&sum;") (Mi  ( "i=" ++(prettyPrintMathML (mathExprToMathML lower)) ))  (  Mn (prettyPrintMathML (mathExprToMathML upper ))   )
     {- 
     Mo "(",
     Mrow [
